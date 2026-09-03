@@ -1,3 +1,5 @@
+import { pathToFileURL } from "node:url"
+import { resolve, isAbsolute } from "node:path"
 import { ConfigSchema, type Config } from "./schema.js"
 
 /** Identity at runtime; exists purely for editor autocompletion at authoring time. */
@@ -10,7 +12,11 @@ export function defineConfig(cfg: Config): Config {
  * a sandbox.
  */
 export async function loadConfig(path: string): Promise<Config> {
-  const mod = (await import(path)) as { default?: unknown }
+  // A bare relative path is a PACKAGE specifier to dynamic import(); resolve to a file URL.
+  const url = /^[a-z]+:\/\//i.test(path)
+    ? path
+    : pathToFileURL(isAbsolute(path) ? path : resolve(process.cwd(), path)).href
+  const mod = (await import(url)) as { default?: unknown }
   const parsed = ConfigSchema.safeParse(mod.default)
   if (!parsed.success) {
     throw new Error(
