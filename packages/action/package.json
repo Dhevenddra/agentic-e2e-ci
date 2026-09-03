@@ -1,0 +1,13 @@
+{
+  "name": "@agentic-e2e/action",
+  "version": "0.0.0",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": { "build": "tsc -b" },
+  "dependencies": {
+    "@agentic-e2e/config": "workspace:*",
+    "@agentic-e2e/runner": "workspace:*",
+    "@agentic-e2e/reporter": "workspace:*"
+  }
+}

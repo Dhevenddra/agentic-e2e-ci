@@ -1,0 +1,14 @@
+name: "Agentic E2E CI"
+description: "Plain-English end-to-end tests run by an agent against an ephemeral preview of the PR's build."
+inputs:
+  config:
+    description: "Path to agent-e2e.config.ts"
+    required: false
+    default: "agent-e2e.config.ts"
+  artifact:
+    description: "Name of the build artifact produced by the unprivileged build workflow"
+    required: false
+    default: "app-build"
+runs:
+  using: "node20"
+  main: "dist/main.js"

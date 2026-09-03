@@ -1,0 +1,12 @@
+{
+  "name": "@agentic-e2e/agent",
+  "version": "0.0.0",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": { "build": "tsc -b" },
+  "dependencies": {
+    "zod": "^4.5.4",
+    "openai": "^7.9.0"
+  }
+}

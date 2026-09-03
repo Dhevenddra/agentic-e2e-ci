@@ -1,0 +1,41 @@
+# WORKFLOW A — UNPRIVILEGED.
+#
+# Runs fork-controlled code. Therefore it has NO secrets and a read-only token.
+# Its only job is to produce a build artifact. See the fork-safe pattern in e2e-agent.yml.
+#
+# This repo dogfoods itself: it builds examples/demo-app into dist/ and the agent tests it.
+name: e2e-build
+
+on:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with: { version: 9 }
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm build:demo # -> dist/ (examples/demo-app)
+
+      - name: Record PR context
+        run: |
+          mkdir -p ./pr-meta
+          echo "${{ github.event.pull_request.number }}" > ./pr-meta/pr-number
+          echo "${{ github.event.pull_request.head.sha }}" > ./pr-meta/head-sha
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: app-build
+          path: |
+            dist
+            pr-meta
+          if-no-files-found: warn

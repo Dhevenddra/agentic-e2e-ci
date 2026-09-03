@@ -1,0 +1,14 @@
+{
+  "name": "@agentic-e2e/reporter",
+  "version": "0.0.0",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "build": "tsc -b"
+  },
+  "dependencies": {
+    "@agentic-e2e/agent": "workspace:*",
+    "@octokit/rest": "^22.0.1"
+  }
+}

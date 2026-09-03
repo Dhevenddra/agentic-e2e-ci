@@ -1,0 +1,21 @@
+node_modules/
+dist/
+*.tsbuildinfo
+.env
+.env.local
+coverage/
+.DS_Store
+
+# ─────────────────────────────────────────────────────────────────────────────
+# PRIVATE — ours, never published. Only the tool codebase goes to the public repo.
+# (progress, research, decisions, operating contract, internal spikes, dev cache)
+# ─────────────────────────────────────────────────────────────────────────────
+docs/
+CLAUDE.md
+.claude/
+spikes/
+.agent-e2e/
+*.log
+
+# The compass research + any scratch
+compass_artifact_*.md

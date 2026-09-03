@@ -1,0 +1,77 @@
+# WORKFLOW B — PRIVILEGED.
+#
+# Holds SOLARI_API_KEY + MODEL_API_KEY. Runs BASE-BRANCH code only.
+#
+# It must NEVER check out the fork head. `actions/checkout` with
+# `ref: github.event.pull_request.head.sha` here is the "pwn request" vulnerability
+# that has compromised repos at MITRE and Splunk. Do not add it.
+#
+# The fork's build output is downloaded as DATA and executed only inside the Solari
+# microVM, which is the isolation boundary this design leans on. Posting uses the
+# built-in GITHUB_TOKEN (write in workflow_run context) — no PAT or App required.
+name: e2e-agent
+
+on:
+  workflow_run:
+    workflows: ["e2e-build"]
+    types: [completed]
+
+permissions:
+  contents: read
+  pull-requests: write
+  checks: write
+  actions: read
+
+jobs:
+  agent:
+    if: github.event.workflow_run.conclusion == 'success'
+    runs-on: ubuntu-latest
+    # Required reviewers on this environment gate secret exposure for new contributors.
+    environment: e2e-privileged
+    steps:
+      # Base-branch code. NOT the PR head.
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with: { version: 9 }
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      # Trusted base-branch install + build so the action's deps are present.
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm -r build
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: app-build
+          path: ./artifact
+          run-id: ${{ github.event.workflow_run.id }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Resolve PR context
+        id: pr
+        run: |
+          echo "number=$(cat ./artifact/pr-meta/pr-number)" >> "$GITHUB_OUTPUT"
+          echo "sha=$(cat ./artifact/pr-meta/head-sha)" >> "$GITHUB_OUTPUT"
+
+      - name: Run agentic E2E
+        run: node packages/action/dist/main.js
+        env:
+          SOLARI_API_KEY: ${{ secrets.SOLARI_API_KEY }}
+          MODEL_API_KEY: ${{ secrets.MODEL_API_KEY }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          INPUT_CONFIG: agent-e2e.config.ts
+          # The static build output to serve inside the sandbox (change per your app).
+          APP_DIR: ./artifact/dist
+          PR_NUMBER: ${{ steps.pr.outputs.number }}
+          HEAD_SHA: ${{ steps.pr.outputs.sha }}
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: e2e-run-logs
+          path: .agent-e2e
+          if-no-files-found: ignore

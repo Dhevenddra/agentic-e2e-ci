@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Agentic E2E — Demo App</title>
+    <style>
+      body { font-family: system-ui, sans-serif; max-width: 40rem; margin: 3rem auto; padding: 0 1rem; }
+      input, button { font-size: 1rem; padding: 0.5rem 0.75rem; }
+      #results li { margin: 0.25rem 0; }
+    </style>
+  </head>
+  <body>
+    <h1>Search Demo</h1>
+    <p>A tiny app under test. The agent drives this by reading the accessibility tree.</p>
+
+    <label for="q">Query</label>
+    <input id="q" aria-label="Query" />
+    <button id="go">Search</button>
+
+    <ul id="results" aria-label="Results"></ul>
+
+    <script>
+      const go = document.getElementById("go")
+      go.addEventListener("click", () => {
+        const q = document.getElementById("q").value.trim()
+        const ul = document.getElementById("results")
+        ul.innerHTML = q ? `<li>Result for "${q}"</li>` : ""
+        go.textContent = "Searched"
+      })
+    </script>
+  </body>
+</html>
