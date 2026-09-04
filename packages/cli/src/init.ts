@@ -25,7 +25,7 @@ export function detectFramework(pkg: Record<string, unknown>): Detected | null {
 const configTemplate = (d: Detected | null): string => {
   const f = d ?? { build: "npm run build", serve: "npm run preview", port: 4173 }
   const todo = d ? "" : "  // TODO: we could not detect your framework — check build/serve/port.\n"
-  return `import { defineConfig } from "@agentic-e2e/config"
+  return `import { defineConfig } from "agentic-e2e"
 
 export default defineConfig({
 ${todo}  build: ${JSON.stringify(f.build)},
@@ -110,13 +110,16 @@ jobs:
           path: ./artifact
           run-id: \${{ github.event.workflow_run.id }}
           github-token: \${{ secrets.GITHUB_TOKEN }}
+      - uses: actions/setup-node@v4
+        with: { node-version: 24 }
+      - run: npm ci
       - name: Resolve PR context
         id: pr
         run: |
           echo "number=$(cat ./artifact/pr-meta/pr-number)" >> "$GITHUB_OUTPUT"
           echo "sha=$(cat ./artifact/pr-meta/head-sha)" >> "$GITHUB_OUTPUT"
       - name: Run agentic E2E
-        uses: Dhevenddra/agentic-e2e-ci@v1
+        run: npx agentic-e2e run
         env:
           SOLARI_API_KEY: \${{ secrets.SOLARI_API_KEY }}
           MODEL_API_KEY: \${{ secrets.MODEL_API_KEY }}
@@ -159,6 +162,10 @@ export async function init(opts: InitOptions = {}): Promise<{ written: string[] 
   }
 
   console.log("agentic-e2e: scaffolded", written.join(", "))
-  console.log("Next: (1) add SOLARI_API_KEY and MODEL_API_KEY as repo secrets; (2) open a PR.")
+  console.log("Next:")
+  console.log("  1. npm i -D agentic-e2e")
+  console.log("  2. add SOLARI_API_KEY and MODEL_API_KEY as repo secrets")
+  console.log("  3. (recommended) create an 'e2e-privileged' Environment with a required reviewer")
+  console.log("  4. open a PR")
   return { written }
 }

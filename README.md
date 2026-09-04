@@ -71,9 +71,25 @@ details.
 The healed count is printed on every run. That number is the argument: it's the change
 that would have broken a brittle test, absorbed, and made visible in code review.
 
+## What you need (bring your own keys)
+
+This tool is the **engine**; the API keys are the **fuel** — and everyone brings their own.
+Installing it shares the code, never anyone's keys. To use it on your repo you sign up for
+two accounts and add their keys as **your** repo secrets:
+
+- a **[Solari](https://getsolari.com)** account — the sandbox that builds your PR, the stealth
+  browser, and the session recording, and
+- a **model** account for the agent's brain — [Fireworks](https://fireworks.ai), OpenAI, or any
+  OpenAI-compatible endpoint.
+
+Your runs bill **your** Solari and model accounts, not ours. The keys live only in your repo's
+encrypted secrets — they are never in the published package and never reach fork-controlled code.
+(It's like a game you download for free but log into with your own account.)
+
 ## Install
 
 ```
+npm i -D agentic-e2e
 npx agentic-e2e init
 ```
 

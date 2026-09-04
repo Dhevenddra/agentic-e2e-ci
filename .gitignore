@@ -19,3 +19,6 @@ spikes/
 
 # The compass research + any scratch
 compass_artifact_*.md
+
+# Generated at build time (copy of the root README for the npm page)
+packages/cli/README.md
