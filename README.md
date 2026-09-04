@@ -58,7 +58,11 @@ reasons unrelated to behavior. So don't write them against implementation detail
 ## How it works
 
 <p align="center">
-  <img src="assets/agent-demo.gif" alt="The agent reading a page and completing a scenario" width="640">
+  <img src="assets/architecture.png" alt="Pull request to sandbox preview to agent to PR comment, with the fork-safe security boundary" width="900">
+</p>
+
+<p align="center">
+  <img src="assets/agent-demo.gif" alt="The agent reading a page and completing a scenario" width="600">
 </p>
 
 1. A Solari **sandbox** builds and serves your PR's code on a temporary preview URL.
