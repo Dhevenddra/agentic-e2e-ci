@@ -26,7 +26,7 @@
         const q = document.getElementById("q").value.trim()
         const ul = document.getElementById("results")
         ul.innerHTML = q ? `<li>Result for "${q}"</li>` : ""
-        go.textContent = "Searched"
+        // Regression: the "Searched" confirmation was dropped in a refactor.
       })
     </script>
   </body>
