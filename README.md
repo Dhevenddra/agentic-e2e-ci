@@ -75,6 +75,10 @@ reasons unrelated to behavior. So don't write them against implementation detail
 The **healed** count is printed on every run. That number is the whole argument: it's the
 change that would have broken a brittle test, quietly absorbed and made visible in review.
 
+<p align="center">
+  <img src="assets/self-heal.gif" alt="A renamed button that heals itself instead of breaking the test" width="680">
+</p>
+
 ## What you need (bring your own keys)
 
 This tool is the **engine**; the API keys are the **fuel** — everyone brings their own.
