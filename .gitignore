@@ -25,3 +25,6 @@ packages/cli/README.md
 
 # Playwright MCP scratch
 .playwright-mcp/
+
+# Local-only helper skill (do not publish)
+SKILL.md
