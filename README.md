@@ -83,6 +83,13 @@ change that would have broken a brittle test, quietly absorbed and made visible 
   <img src="assets/self-heal.gif" alt="A renamed button that heals itself instead of breaking the test" width="680">
 </p>
 
+And when something actually breaks, you get a red check with the reason, after the scenario
+re-runs on the same commit to rule out a flake:
+
+<p align="center">
+  <img src="assets/pr-comment-fail.png" alt="A failing check: the agent caught a real regression and confirmed it wasn't a flake" width="640">
+</p>
+
 ## What you need (bring your own keys)
 
 This tool is the **engine**; the API keys are the **fuel** — everyone brings their own.
