@@ -61,8 +61,10 @@ export async function launchBrowser(cfg: Config): Promise<BrowserSession> {
           // link the PERMANENT console viewer instead of pasting an expiring URL in the PR.
           const r = await solari.sessions.getReplayUrl(sessionId).catch(() => undefined)
           if (r?.url) {
-            // KI-010: console deep-link pattern inferred; verify against a real console.
-            return `https://console.getsolari.com/sessions/${encodeURIComponent(sessionId)}`
+            // The presigned URL (r.url) expires (~900s), so we don't link it in a durable
+            // comment. Link the Solari console (permanent, always valid). KI-010: once the
+            // per-session deep-link format is confirmed, return that instead.
+            return "https://console.getsolari.com"
           }
           await new Promise((res) => setTimeout(res, 3000))
         }
